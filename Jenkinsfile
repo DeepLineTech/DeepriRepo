@@ -5,10 +5,18 @@ node {
    }
    stage('Build Test & Package') {
       echo 'Build the package'
-      sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=manee2k6 -Dsonar.login=c1c92712de4e9239e36dc6110383da9ff2d88a40'
+      sh 'mvn clean compile'
    }
-   stage('Results') {
-       echo 'Test Results are reported..'
+   stage('Sonarqube analysis') {
+       steps {
+    script {
+             scannerHome = tool 'SonarScanner';
+        }
+     withSonarQubeEnv('SonarQube') {
+         sh "${scannerHome}/bin/sonar-scanner.bat" 
+    }
+
+    }
    
    }
    stage('Deploy to Dev'){
