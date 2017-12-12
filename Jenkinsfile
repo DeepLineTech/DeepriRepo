@@ -5,7 +5,7 @@ node {
    }
    stage('Build Test & Package') {
       echo 'Build the package'
-      sh 'mvn clean compile'
+      sh 'mvn clean package'
    }
    stage('Sonarqube analysis') {
        steps {
@@ -13,7 +13,7 @@ node {
              scannerHome = tool 'SonarScanner';
         }
      withSonarQubeEnv('SonarQube') {
-         sh "${scannerHome}/bin/sonar-scanner.bat" 
+         sh "mvn sonar:sonar" 
     }
 
     }
